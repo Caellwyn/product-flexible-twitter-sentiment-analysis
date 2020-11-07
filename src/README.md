@@ -1,0 +1,1 @@
+This directory stores all .py files created to provide functions and classes for use in this project.

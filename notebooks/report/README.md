@@ -1,0 +1,1 @@
+This directory stores only the final notebook for the project

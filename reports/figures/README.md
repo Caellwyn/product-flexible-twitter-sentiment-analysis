@@ -1,0 +1,1 @@
+This directory stores all figures used in the final presentation.

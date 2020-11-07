@@ -1,0 +1,1 @@
+This directory stores all Jupiter notebooks created for this project.

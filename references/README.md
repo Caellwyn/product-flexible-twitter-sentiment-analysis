@@ -1,0 +1,1 @@
+This directory stores all documentation used in understanding the data and relevant context for the business problem.

@@ -1,0 +1,1 @@
+This directory stores a pdf of the final presentation and an additional directory containing all figures used in the final presentation.
