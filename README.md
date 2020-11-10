@@ -15,16 +15,25 @@ This dataset contain 3 variables describing 9093 tweets: the target product, the
 
 The target products included in this dataset were:
 
-iPad: 946 tweets, 125 negative, 24 no emotion, 793 positive
-Apple: 661 tweets, 95 negative, 21 no emotion, 543 positive
-iPad or iPhone App: 470 tweets, 2 negative, 1 no meotion, 32 positive
-Google: 430 tweets, 68 negative, 15 no emotion, 346 positive
-Iphone: 297 tweets, 203 negative, 9 no emotion, 184 positive
-Other Google product or service: 293 tweets, 47 negative, 9 no emotion, 236 positive
-Android App: 81 tweets, 8 negative, 1 no emotion, 72 positive
-Android: 78 tweets, 8 negative, 1 no emotion, 69 positive
-and Other Apple product or service: 35 tweets, 2 negative, 1 no emotion, 32 positive
-No target product: 5802 tweets, 51 negative, 5297 no emotion, 306 positive
+1. iPad: 946 tweets, 125 negative, 24 no emotion, 793 positive
+
+2. Apple: 661 tweets, 95 negative, 21 no emotion, 543 positive
+
+3. iPad or iPhone App: 470 tweets, 2 negative, 1 no meotion, 32 positive
+
+4. Google: 430 tweets, 68 negative, 15 no emotion, 346 positive
+
+5. Iphone: 297 tweets, 203 negative, 9 no emotion, 184 positive
+
+6. Other Google product or service: 293 tweets, 47 negative, 9 no emotion, 236 positive
+
+7. Android App: 81 tweets, 8 negative, 1 no emotion, 72 positive
+
+8. Android: 78 tweets, 8 negative, 1 no emotion, 69 positive
+
+9. Other Apple product or service: 35 tweets, 2 negative, 1 no emotion, 32 positive
+
+10. No target product: 5802 tweets, 51 negative, 5297 no emotion, 306 positive
 
 
 Phase 4 project using NLP techniques to perform sentiment analysis on a set of tweets
