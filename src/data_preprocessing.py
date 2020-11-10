@@ -112,13 +112,15 @@ def emotion_label(string):
     else:
         print('Unknown emotion')
 
-def df_clean(df, lem = True):
+def df_clean(df = None, lem = True):
     '''
     A function that returns a cleaned up dataframe.
     It also drops all the no-product rows.
     Will take a dataframe as an argument, and can also pass the argument 'False' to turn off lemmatizer if needed.
     
     '''
+    if df is None:
+        df = pd.read_csv('../../data/judge-1377884607_tweet_product_company.csv', encoding = 'latin1')
     df.columns = ['text', 'product', 'emotion']
     df = df[df['emotion'] != 'I can\'t tell']
     df.dropna(inplace = True)
