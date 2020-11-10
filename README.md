@@ -39,3 +39,8 @@ The target products included in this dataset were:
 Phase 4 project using NLP techniques to perform sentiment analysis on a set of tweets
 
 #placeholder for user oriented REAMME file
+
+# References:
+
+Jeffrey Pennington, Richard Socher, and Christopher D. Manning. 2014. [GloVe: Global Vectors for Word Representation](https://nlp.stanford.edu/pubs/glove.pdf). [pdf] [bib]
+
