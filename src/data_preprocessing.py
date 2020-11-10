@@ -52,7 +52,7 @@ def product_target(string):
     else:
         return 'Unknown target'
 
-def txt_clean(txt, stop_words=sw):
+def txt_clean(txt, lem):
     '''
     Takes in a string and returns a cleaned up version of it.
     Will be ran by itself in the df_clean function.
@@ -85,10 +85,11 @@ def txt_clean(txt, stop_words=sw):
     # removing empty strings
     t = [w for w in t if w]
     # word lemmatizing
-    t = pos_tag(t)
-    t = [(w[0], get_wordnet_pos(w[1])) for w in t]
-    lem = WordNetLemmatizer()
-    if lem: t = [lem.lemmatize(w[0], w[1]) for w in t]
+    if lem: 
+        lemm = WordNetLemmatizer()
+        t = pos_tag(t)
+        t = [(w[0], get_wordnet_pos(w[1])) for w in t]
+        t = [lemm.lemmatize(w[0], w[1]) for w in t]
     # joining all the strings together into one
     return ' '.join(t)
 
@@ -118,7 +119,7 @@ def df_clean(lem = True):
     df.dropna(inplace = True)
     df['text_product'] = df.apply(lambda x: list([x['text'], x['product']]), axis = 1)
     df['emotion'] = df['emotion'].map(emotion_label)
-    df['txt_cleaned'] = df['text_product'].apply(txt_clean)
+    df['txt_cleaned'] = df['text_product'].apply(txt_clean, args = (lem,))
     df.drop(columns = ['text', 'product', 'text_product'], inplace = True)
     return df
 
