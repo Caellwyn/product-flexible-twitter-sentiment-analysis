@@ -1,10 +1,15 @@
+import pandas as pd
+import numpy as np
+import random
+
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, TfidfTransformer
+
 import re
 from nltk import pos_tag
 from nltk.tokenize import regexp_tokenize, word_tokenize, RegexpTokenizer
 from nltk.corpus import stopwords, wordnet
-from nltk.stem import WordNetLemmatizer
+from nltk.stem import WordNetLemmatizer 
 
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, TfidfTransformer
 
 
 def get_wordnet_pos(treebank_tag):
@@ -107,13 +112,15 @@ def emotion_label(string):
     else:
         print('Unknown emotion')
 
-def df_clean(lem = True):
+def df_clean(df = None, lem = True):
     '''
     A function that returns a cleaned up dataframe.
     It also drops all the no-product rows.
-    No arguments are required, but you can pass the argument 'False' to turn off lemmatizer if needed.
+    Will take a dataframe as an argument, and can also pass the argument 'False' to turn off lemmatizer if needed.
+    
     '''
-    df = pd.read_csv('../../data/judge-1377884607_tweet_product_company.csv', encoding = 'latin1')
+    if df is None:
+        df = pd.read_csv('../../data/judge-1377884607_tweet_product_company.csv', encoding = 'latin1')
     df.columns = ['text', 'product', 'emotion']
     df = df[df['emotion'] != 'I can\'t tell']
     df.dropna(inplace = True)
