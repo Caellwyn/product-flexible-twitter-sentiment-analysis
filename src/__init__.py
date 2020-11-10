@@ -8,6 +8,10 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, Tf
 
 
 def get_wordnet_pos(treebank_tag):
+    '''
+    Function takes in a string and assigns it a part of speech tag.
+    Used for lemmatizing.
+    '''
     if treebank_tag.startswith('J'):
         return wordnet.ADJ
     elif treebank_tag.startswith('V'):
@@ -20,6 +24,10 @@ def get_wordnet_pos(treebank_tag):
         return wordnet.NOUN
     
 def product_target(string):
+    '''
+    Takes in the data from the product column through the string parameter.
+    Returns a string that the clean function will replace with 'product_target' if it sees any instances of it.
+    '''
     s = string.lower()
     if s == 'no target':
         return ''
@@ -45,7 +53,11 @@ def product_target(string):
         return 'Unknown target'
 
 def txt_clean(txt, stop_words=sw):
-    # takes in a string and returns a cleaned up string ready for count or tfidf vectorizing
+    '''
+    Takes in a string and returns a cleaned up version of it.
+    Will be ran by itself in the df_clean function.
+    '''
+    
     sw = stopwords.words('english')
     sw.extend(['link', 'rt', 'get'])
     punctuation = '!"$%&\'()*+,-./:;<=>?[\\]^_`{|}~“!#'
@@ -81,6 +93,9 @@ def txt_clean(txt, stop_words=sw):
     return ' '.join(t)
 
 def emotion_label(string):
+    '''
+    Turns the emotion values into numerical labels.
+    '''
     s = string
     if s == 'Positive emotion':
         return 2
@@ -92,10 +107,14 @@ def emotion_label(string):
         print('Unknown emotion')
 
 def df_clean(lem = True):
+    '''
+    A function that returns a cleaned up dataframe.
+    It also drops all the no-product rows.
+    No arguments are required, but you can pass the argument 'False' to turn off lemmatizer if needed.
+    '''
     df = pd.read_csv('../../data/judge-1377884607_tweet_product_company.csv', encoding = 'latin1')
     df.columns = ['text', 'product', 'emotion']
     df = df[df['emotion'] != 'I can\'t tell']
-    df['product'].fillna('No Target', inplace = True)
     df.dropna(inplace = True)
     df['text_product'] = df.apply(lambda x: list([x['text'], x['product']]), axis = 1)
     df['emotion'] = df['emotion'].map(emotion_label)
@@ -112,7 +131,19 @@ def df_clean(lem = True):
 
 
 class Vectorizer:
+    '''
+    Vectorizer class.
+    When initializing it, requires a type parameter and a tuple to input ngram parameters.
+    A type parameter of 'cv' will create a Count Vectorizer, while a parameter of 'tfidf' will create a Tfidf Vectorizer.
+    The first number in the ngram is the minimum ngram, the second number is the maximum ngram.
+    
+    Methods include .fit(), .transform(), and .fit_transform().  They should work exactly the same as usual models with the same inputs and outputs.
+    '''
     def __init__(self, vec_type, ngram = (1,1)):
+        '''
+        Function requires a vec_type argument of 'cv' or 'tfidf' and a tuple for ngrams.
+        Vectorizer is initialized with the type denoted in the vec_type parameter.
+        '''
         if type(ngram) is not tuple:
             print('Unknown tuple, format should be (minimum n-gram, maximum n-gram)')
             return False
@@ -126,9 +157,17 @@ class Vectorizer:
             return False
         
     def fit(self, X, y = None):
+        '''
+        Requires an input data X.
+        Fits the vectorizer to it.
+        '''
         self.vec.fit(X)
 
     def transform(self, X, y):
+        '''
+        Requires an input data X and y.
+        Transforms the input data X and returns it.
+        '''
         X_vec = self.vec.transform(X)
         X_vec = pd.DataFrame.sparse.from_spmatrix(X_vec)
         X_vec.columns = sorted(self.vec.vocabulary_)
@@ -136,6 +175,10 @@ class Vectorizer:
         return X_vec
     
     def fit_transform(self, X, y):
+        '''
+        Requires an input data X and y.
+        Fits the vectorizer to the input data X, transforms it, and then returns it.
+        '''
         self.vec.fit(X)
         X_vec = self.vec.transform(X)
         X_vec = pd.DataFrame.sparse.from_spmatrix(X_vec)
