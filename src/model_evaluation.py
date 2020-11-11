@@ -31,6 +31,7 @@ def plot_confusion_matrix(y_true,y_pred):
     """
     import seaborn as sns
     from sklearn.metrics import confusion_matrix
+    import matplotlib.pyplot as plt
 
     sns.heatmap(confusion_matrix(y_true, y_pred, normalize = 'true'), 
             annot = True, 
