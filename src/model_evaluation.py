@@ -24,19 +24,34 @@ def graph_model_history(history):
     plt.show()
 
 
-def plot_confusion_matrix(y_true,y_pred):
+def plot_confusion_matrix(y_true,y_pred, save_path = None):
     """
     Uses sklearn.metrics.confusion_matrix to plot a seaborn heatmap with normalized labels for a 3x3 confusion matrix.  
     Inputs y_true and y_pred must each have 3 categories one column.
+    take an optional argument: save_path = None or string-type filepath
     """
     import seaborn as sns
     from sklearn.metrics import confusion_matrix
     import matplotlib.pyplot as plt
+    sns.set(context = 'notebook', style = 'whitegrid')
+    from colour import Color
+    blue = Color("#212D74")
+    ltblue = Color('#7890CD')
+    blues = list(ltblue.range_to(blue,40))
+
+
+    colors = []
+    for color in blues:
+        colors.append(color.hex)
 
     sns.heatmap(confusion_matrix(y_true, y_pred, normalize = 'true'), 
             annot = True, 
             xticklabels = ['Negative','Neutral','Positive'],
-            yticklabels = ['Negative','Neutral','Positive'])
+            yticklabels = ['Negative','Neutral','Positive'],
+            cmap = colors)
+    
+    if save_path:
+        plt.savefig(save_path)
     plt.xlabel = 'Predicted Sentiment'
     plt.ylabel = 'True Sentiment'
     plt.show()
