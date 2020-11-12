@@ -1,18 +1,37 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 def graph_model_history(history):
+    """
+    Takes as argument a model history: either the return of a KerasClassifier or the model.history of a Keras model.
+    Plots model accuracy, validation accuracy, model loss, and validation loss training histories, if they are present in the history.history dictionary object:
+    """
+        
     import seaborn as sns
     import matplotlib.pyplot as plt
 
     fig, axes = plt.subplots(1,2, figsize = (10,5))
-    axes[0].plot(history.history['acc'], label = 'Train Accuracy')
-    axes[0].plot(history.history['val_acc'], label = 'Validation Accuracy')
+    if 'acc' in history.history.keys():
+        axes[0].plot(history.history['acc'], label = 'Train Accuracy')
+    if 'val_acc' in history.history.keys():
+        axes[0].plot(history.history['val_acc'], label = 'Validation Accuracy')
     axes[0].legend()
-    axes[1].plot(history.history['loss'], label = 'Train Loss')
-    axes[1].plot(history.history['val_loss'], label = 'Validation Loss')
+    if 'loss' in history.history.keys():
+        axes[1].plot(history.history['loss'], label = 'Train Loss')
+    if 'val_loss' in history.history.keys():
+        axes[1].plot(history.history['val_loss'], label = 'Validation Loss')
     axes[1].legend()
     plt.show()
 
+
 def plot_confusion_matrix(y_true,y_pred):
+    """
+    Uses sklearn.metrics.confusion_matrix to plot a seaborn heatmap with normalized labels for a 3x3 confusion matrix.  
+    Inputs y_true and y_pred must each have 3 categories one column.
+    """
     import seaborn as sns
+    from sklearn.metrics import confusion_matrix
+    import matplotlib.pyplot as plt
 
     sns.heatmap(confusion_matrix(y_true, y_pred, normalize = 'true'), 
             annot = True, 

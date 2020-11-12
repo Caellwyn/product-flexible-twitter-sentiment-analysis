@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 import random
+import pathlib
+
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, TfidfTransformer
 
@@ -62,7 +64,6 @@ def txt_clean(txt, lem):
     Takes in a string and returns a cleaned up version of it.
     Will be ran by itself in the df_clean function.
     '''
-    
     sw = stopwords.words('english')
     sw.extend(['link', 'rt', 'get'])
     punctuation = '!"$%&\'()*+,-./:;<=>?[\\]^_`{|}~“!#'
@@ -72,7 +73,10 @@ def txt_clean(txt, lem):
     num_re = re.compile('^\d+$')
     
     # splitting the text up into words
-    t = txt[0].split(' ')
+    if isinstance(txt, list):
+        t = txt[0].split(' ')
+    else:
+        t = txt.split(' ')
     # turning the words lowercase
     t = [w.lower() for w in t]
     # removing punctuation
@@ -85,8 +89,11 @@ def txt_clean(txt, lem):
     t = [w for w in t if no_accents_re.match(w)]
     # removing stop words and more twitter jargon
     t = [w for w in t if w not in sw]
-    # change targets in string to 'product_target'
-    t = ['product_target' if w == product_target(txt[1]) else w for w in t]
+    # change targets in string to 'product_target' if a target exists
+    if isinstance(txt, list):
+        t = ['product_target' if w in product_target(txt[1]) else w for w in t]
+        if txt[1].lower() in ['android app', 'ipad or iphone app']:
+            t = [w for w in t if w is not 'app']
     # removing empty strings
     t = [w for w in t if w]
     # word lemmatizing
@@ -97,6 +104,18 @@ def txt_clean(txt, lem):
         t = [lemm.lemmatize(w[0], w[1]) for w in t]
     # joining all the strings together into one
     return ' '.join(t)
+
+def get_wordnet_pos(treebank_tag):
+    if treebank_tag.startswith('J'):
+        return wordnet.ADJ
+    elif treebank_tag.startswith('V'):
+        return wordnet.VERB
+    elif treebank_tag.startswith('N'):
+        return wordnet.NOUN
+    elif treebank_tag.startswith('R'):
+        return wordnet.ADV
+    else:
+        return wordnet.NOUN
 
 def emotion_label(string):
     '''
@@ -120,7 +139,9 @@ def df_clean(df = None, lem = True):
     
     '''
     if df is None:
-        df = pd.read_csv('../../data/judge-1377884607_tweet_product_company.csv', encoding = 'latin1')
+        this_path = pathlib.Path().absolute()
+        d_path = this_path.parent / "data" 
+        df = pd.read_csv(d_path/'judge-1377884607_tweet_product_company.csv', encoding = 'latin1')
     df.columns = ['text', 'product', 'emotion']
     df = df[df['emotion'] != 'I can\'t tell']
     df.dropna(inplace = True)
@@ -131,6 +152,40 @@ def df_clean(df = None, lem = True):
     return df
 
 
+def external_data(lem = True):
+    '''
+    A function that returns a big array with all three external datasets cleaned up so that it is similar to our base data.
+    Has an optional parameter of lem, by default it is true but setting it to false will leave out the lemmatizing.
+    '''
+    this_path = pathlib.Path().absolute()
+    d_path = this_path.parent / "data" 
+
+    df_1 = pd.read_csv(d_path/'Apple-Twitter-Sentiment-DFE.csv', encoding = 'latin1')
+    df_1 = df_1[['sentiment', 'text']]
+    df_1.columns = ['emotion', 'text']
+    dic_1 = {'5': 2, '3' : 1, '1': 0}
+    df_1.replace({'emotion': dic_1}, inplace = True)
+    df_1['txt_cleaned'] = df_1['text'].apply(txt_clean, args = (lem,))
+    df_1.drop('text', axis = 1, inplace = True)
+
+    df_2 = pd.read_csv(d_path/'Deflategate-DFE.csv', encoding = 'latin1')
+    df_2 = df_2[['deflate_sentiment', 'text']]
+    df_2.columns = ['emotion', 'text']
+    dic_2 = {'positive': 2, 'slightly positive': 2, ('neutral') : 1, 'negative': 0, 'slightly negative': 0}
+    df_2.replace({'emotion': dic_2}, inplace = True)
+    df_2['txt_cleaned'] = df_2['text'].apply(txt_clean, args = (lem,))
+    df_2.drop('text', axis = 1, inplace = True)
+
+    df_3 = pd.read_csv(d_path/'Coachella-2015-2-DFE.csv', encoding = 'latin1')
+    df_3 = df_3[['coachella_sentiment', 'text']]
+    df_3.columns = ['emotion', 'text']
+    df_3 = df_3[df_3['emotion'] != 'cant tell']
+    dic_3 = {'positive': 2, 'neutral' : 1, 'negative': 0}
+    df_3.replace({'emotion': dic_3}, inplace = True)
+    df_3['txt_cleaned'] = df_3['text'].apply(txt_clean, args = (lem,))
+    df_3.drop('text', axis = 1, inplace = True)
+
+    return pd.concat([df_1, df_2, df_3])
 
 
 
@@ -193,7 +248,3 @@ class Vectorizer:
         X_vec.columns = sorted(self.vec.vocabulary_)
         X_vec.set_index(y.index, inplace = True)
         return X_vec
-    
-    
-    
-
