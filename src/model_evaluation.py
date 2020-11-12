@@ -51,7 +51,7 @@ def plot_confusion_matrix(y_true,y_pred, save_path = None):
             cmap = colors)
     
     if save_path:
-        plt.savefig(save_path)
+        plt.savefig(save_path, dpi = 500, bbox_inches = 'tight', transparent = True)
     plt.xlabel = 'Predicted Sentiment'
     plt.ylabel = 'True Sentiment'
     plt.show()
