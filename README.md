@@ -99,7 +99,11 @@ We explored 3 very different model architectures: shallow models, convolutional 
 
 ## Convolutional Neural Networks
 
-# Matt Add More Here
+We also choose to try a convolutional neural network implementation with an embedding layer as this is a common modeling architecture in NLP and in particular with sentiment analysis. The final structure of the model we arrived at began with an embedding layer, followed by a 1 dimensional convolutional layer with dropout, followed by a max-pooling layer. We then flattened the output and passed it through two dense layers with dropout and ending with a 3 node dense layer with softmax activation for prediction output.
+
+With this model we were able to achieve approximately 62% overall accuracy with this model, with a fairly balanced distribution of accuracy across all classes. The positive class was predicted a bit more accurately at 71%, but was still only about 10% more accurate than the least accurate class.
+
+![CNN confusion matrix](reports/figures/CNN_confusion_matrix.png)
 
 ## Recurrent Neural Networks.
 
