@@ -10,8 +10,6 @@ We trained our model using 4 datasets hosted on data.world's [Crowdflower](https
 
 * The Coachella-2015 dataset
 
-# Andrew add more here
-
 # Data Exploration
 
 | Index                 | Tweet Text                     | Tweet Target                                      | Tweet Sentiment                                                         |
