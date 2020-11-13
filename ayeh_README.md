@@ -34,6 +34,7 @@ With the introduction of our new data, the difference in the number of each clas
 
 # Feature Engineering
 
+Our main goal for our project is to create a model that will predict sentiment relative to a flexible product.  To do this, we do not want our model to make predictions 
 Product_target
 
 ![product_target_before_after](/reports/figures/product_target_before_after.png)
