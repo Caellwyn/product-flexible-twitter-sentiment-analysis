@@ -34,8 +34,7 @@ With the introduction of our new data, the difference in the number of each clas
 
 # Feature Engineering
 
-Our main goal for our project is to create a model that will predict sentiment relative to a flexible product.  To do this, we do not want our model to make predictions 
-Product_target
+Our main goal for our project is to create a model that will predict sentiment relative to a flexible product.  To do this, we do not want our model to make predictions based on user's sentiments based on prior tweets, but instead to judge the tweet solely on the tweet sentence content.  In other words, we do not want our model to naturally predict tweets about iPhones to be positive when we have a lot of existing tweets with users that sing praises about their new iPhones.  To do so, we will deal with it by replacing any instances of a tweet's target in their respective text with one, all-encompassing phrase "product_target".  Thus instead of saying "I love my new iPhone.", it will become "I love my new product_target.".  By doing this our model will be more focused on the "I love my" portion of the sentence istead of whether or not existing data supports positive tweets for an iPhone. Not only does this help deal with overfitting, this would allow our model to work on targets outside of the ones in our dataset, such as if we wanted to look at tweets about a festival or a sports team.
 
 ![product_target_before_after](/reports/figures/product_target_before_after.png)
 
