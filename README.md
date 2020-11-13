@@ -38,11 +38,20 @@ We began with a rather simple RNN using a trainable embedding layer followed by 
 
 We also explored using pretrained GloVe Embeddings<sup>1</sup> rather than a trainable embedding layer, but because so much of the vocabulary from our dataset was nonstandard English, the GloVe dictionary, though massive woulc only encode about 2/3rds of it.  The model lost too much information from the tweets to be able to perform well.  We also tried initializing the embedding layer with the GloVe embeddings and then letting train from there, but this also gave disappointing results.
 
-The change that did end up making some difference was to make the LSTM layer both smaller (from 25 neurons to 5 neurons) and to make it bidirectional so it read the tweets both forward and backward at the same time.  These changes raised the accuracy from 62% to 64.5% with a reasonable distribution of errors across classes.  It did somewhat better on positive emotion labeled tweets, and tended to miscategorize neutral tweets as negative.  This ended up being as much accuracy as we could squeeze out of this style of model.
+The change that did end up making some difference was to make the LSTM layer both smaller (from 25 neurons to 5 neurons) and to make it bidirectional so it read the tweets both forward and backward at the same time.  The bidirectionality combined with the memory of the LSTM's memory cell allowed the model to read words both in the context of the words that came before them, but also in the context of words that came after.  This is similar to how humans read, retroactively contextualizing what they have read based on what they read later.
 
+The final LSTM model was actually simpler than the first simple model:
+
+![LSTM model architecture](reports/figures/Best_LSTM_structure.png)
+
+These changes raised the accuracy from 62% to 64.5% with a reasonable distribution of errors across classes.  It did somewhat better on positive emotion labeled tweets, and tended to miscategorize neutral tweets as negative.  This ended up being as much accuracy as we could squeeze out of this style of model.
+
+![LSTM confusion matrix](reports/figures/best_LSTM_confusion_matrix.png)
+
+If you want to learn more about this type of model, please refer to [this excellent article](https://medium.com/@raghavaggarwal0089/bi-lstm-bc3d68da8bd0) by Raghav Aggerwal.
 # Summary
 
-We created a model that can label tweets about a specific product with 67% accuracy, about 2/3rds of the time.  This can be used, in conjunction with a twitter crawler, to determine how positively or negatively a specific product is being regarded in the Twitterverse during a specific timeframe.  The best model we made was also the simplest, fastest, and least computationally demanding, a logistic regression model.
+We created a model that can label tweets about a specific product with 67% accuracy.  This can be used, in conjunction with a twitter crawler to pick tweets related to a brand or product, to determine how positively or negatively a specific product is being regarded in the Twitterverse during a specific timeframe.  The best model we made was also the simplest, fastest, and least computationally demanding, a logistic regression model.  However we used a lot of preprocessing to achieve this success.  We focused the model on the target product by replacing the product name with 'targetproduct', tokenized and lemmatized the words to boil them down into their basic meanings, and then vectorized them using a count vectorizer to index them by how commonly they show up.  The model used this heavily processed version of the tweets to determine their emotional content.
 
 # Going Forward:
 
