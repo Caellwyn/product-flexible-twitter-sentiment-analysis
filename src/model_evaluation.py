@@ -34,24 +34,21 @@ def plot_confusion_matrix(y_true,y_pred, save_path = None):
     from sklearn.metrics import confusion_matrix
     import matplotlib.pyplot as plt
     sns.set(context = 'notebook', style = 'whitegrid')
-    from colour import Color
-    blue = Color("#212D74")
-    ltblue = Color('#7890CD')
-    blues = list(ltblue.range_to(blue,40))
 
-
-    colors = []
-    for color in blues:
-        colors.append(color.hex)
 
     sns.heatmap(confusion_matrix(y_true, y_pred, normalize = 'true'), 
             annot = True, 
             xticklabels = ['Negative','Neutral','Positive'],
             yticklabels = ['Negative','Neutral','Positive'],
-            cmap = colors)
-    
+            cmap = ['#7890cd', '#748dcc', '#718acb', '#6d87ca', '#6a83c9', '#6680c8', 
+                    '#637dc7', '#5f7ac6', '#5b76c5', '#5873c5', '#5470c4', '#516cc3', 
+                    '#4d69c2', '#4966c1', '#4662c0', '#425fbf', '#3f5cbe', '#3e5aba', 
+                    '#3c57b7', '#3b55b4', '#3a53b1', '#3851ae', '#374fab', '#354ca8', 
+                    '#344aa5', '#3348a1', '#31469e', '#30449b', '#2f4298', '#2d4095', 
+                    '#2c3e91', '#2b3c8e', '#2a3a8b', '#283888', '#273684', '#263481', 
+                    '#25327e', '#23317b', '#222f77', '#212d74'])    
     if save_path:
-        plt.savefig(save_path)
+        plt.savefig(save_path, dpi = 500, bbox_inches = 'tight', transparent = True)
     plt.xlabel = 'Predicted Sentiment'
     plt.ylabel = 'True Sentiment'
     plt.show()
