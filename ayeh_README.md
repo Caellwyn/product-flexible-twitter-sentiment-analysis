@@ -26,7 +26,7 @@ To ensure that our model is accurate, we'll have to check the class disparity of
 
 ![Class Imbalance Before](/reports/figures/tweets_per_emotion_before.png)
 
-As seen above, the class disparity is quite severe.  Ignoring the fact that the 'no emotion' values are almost double the amount of 'positives', the number of 'negative' sentiment tweets is far too low in order to properly class the tweets.  As we do not want our model to overfit, we must deal with it.  While oversampling our 'negatives' or undersampling our 'no emotion' tweets is possible, we decided to instead import more data from similar datasets, which are datasets that must 1. contain rows of tweet texts and 2. contain a variable relating to the tweet sentiment.  We found three extra datasets that fit our requirements, the Apple Twitter Sentiment dataset, the Deflategate Sentiment dataset, and the Cochella-2015 dataset.  After we imported the extra data, processed them to match our base dataset, and concatenated them together, our class disparity becomes the following.
+As seen above, the class disparity is quite severe.  Ignoring the fact that the 'no emotion' values are almost double the amount of 'positives', the number of 'negative' sentiment tweets is far too low in order to properly class the tweets.  This is bad as it could lead to our model learning to get a high accuracy score simply by guessing 'no emotion' for any input.  As we do not want our model to overfit, we must deal with it.  While oversampling our 'negatives' or undersampling our 'no emotion' tweets is possible, we decided to instead import more data from similar datasets, which are datasets that must 1. contain rows of tweet texts and 2. contain a variable relating to the tweet sentiment.  We found three extra datasets that fit our requirements, the Apple Twitter Sentiment dataset, the Deflategate Sentiment dataset, and the Cochella-2015 dataset.  After we imported the extra data, processed them to match our base dataset, and concatenated them together, our class disparity becomes the following:
 
 ![Class Imbalance After](/reports/figures/tweets_per_emotion_after.png)
 
@@ -36,7 +36,12 @@ With the introduction of our new data, the difference in the number of each clas
 
 Product_target
 
+![product_target_before_after](/reports/figures/product_target_before_after.png)
+
+
 # Data Cleaning and Preprocessing
+
+As our tweet text comes straight from the source, they are undoubtedly very messy.  We must first preprocess the data in order to convert them to a form safe for consumption by our predictive models.  The following is a list of processes we took to turn our dirty source tweets into clean, filtered data:
 
 <ol>
 <li>Split the tweet into tokens</li>
@@ -52,6 +57,11 @@ Product_target
 <li>Rejoin all the tokens into one string</li>
 </ol>
 
+Here is an example of a tweet looks like after we undergo cleaning on it:
+
+![tweet_cleaning_before_after](/reports/figures/tweet_cleaning_before_after.png)
+
+After going through every row and applying our cleaning function to it, we will drop our target column as we have no more need of it.  Thus our resulting dataset after pre-processing will look like the follwing:
 
 | Index                 | Tweet Text                             | Tweet Sentiment                                        |
 | ----------------------|----------------------------------------|--------------------------------------------------------|
