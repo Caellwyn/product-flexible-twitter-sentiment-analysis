@@ -95,7 +95,9 @@ We explored 3 very different model architectures: shallow models, convolutional 
 
 ## Shallow Models
 
-# Elena Add More Here
+We ran 3 shallow models using Multinomial Naive Bayes, Logistic Regression and Random Forest Classifier, and one ensemble model with all three classifiers together. Count and TF-IDF vectorizers were used to preprocessed data sets. Pipeline and grid search were used to find the best hypertuning parameters for our models. Logistic Regression model performed better than other models with 66.0% prediction accuracy on Count Vectorizer in unigram range (1,2). It means the model predicting the best on a single word or two adjacent words. The biggest advantage of Logistic Regression is fast performing, a few seconds less than a minute comparing to several minutes, up to 40 minutes for the ensemble model. 
+
+![Logistic Regression confusion matrix](reports/figures/logreg_cfm.png)
 
 ## Convolutional Neural Networks
 
