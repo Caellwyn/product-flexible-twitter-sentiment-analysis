@@ -28,17 +28,17 @@ def plot_confusion_matrix(y_true,y_pred, save_path = None):
     """
     Uses sklearn.metrics.confusion_matrix to plot a seaborn heatmap with normalized labels for a 3x3 confusion matrix.  
     Inputs y_true and y_pred must each have 3 categories one column.
-    take an optional argument: save_path = None or string-type filepath
+    take an optional argument: save_path = None or string-type filepath that defines the path to save the image at, if desired.  None means image will not be saved.
     """
     import seaborn as sns
     from sklearn.metrics import confusion_matrix
     import matplotlib.pyplot as plt
     sns.set(context = 'notebook', style = 'whitegrid')
 
-
+    
     sns.heatmap(confusion_matrix(y_true, y_pred, normalize = 'true'), 
             annot = True, 
-            xticklabels = ['Negative','Neutral','Positive'],
+            xticklabels = ['Pred Negative','Pred Neutral','Pred Positive'],
             yticklabels = ['Negative','Neutral','Positive'],
             cmap = ['#7890cd', '#748dcc', '#718acb', '#6d87ca', '#6a83c9', '#6680c8', 
                     '#637dc7', '#5f7ac6', '#5b76c5', '#5873c5', '#5470c4', '#516cc3', 
