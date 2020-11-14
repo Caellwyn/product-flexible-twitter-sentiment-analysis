@@ -17,7 +17,7 @@ from nltk.stem import WordNetLemmatizer
 def get_wordnet_pos(treebank_tag):
     '''
     Function takes in a string and assigns it a part of speech tag.
-    Used for lemmatizing.
+    Used for lemmatizing, no need to use elsewhere
     '''
     if treebank_tag.startswith('J'):
         return wordnet.ADJ
@@ -32,8 +32,18 @@ def get_wordnet_pos(treebank_tag):
     
 def product_target(string):
     '''
-    Takes in the data from the product column through the string parameter.
-    Returns a string that the clean function will replace with 'product_target' if it sees any instances of it.
+    Description:
+    - Method used for finding a string that the clean function will replace with 'product_target' if it sees any instances of it.
+    
+    Inputs:
+    - Takes in the data from the product column through the string parameter.
+    
+    Steps:
+    1. sets the target variable to lower case
+    2. searches what the variable is and return a preset value that we will replace with 'product_target'
+    
+    Outputs:
+    - Returns a string
     '''
     s = string.lower()
     if s == 'no target':
@@ -61,8 +71,28 @@ def product_target(string):
 
 def txt_clean(txt, lem):
     '''
-    Takes in a string and returns a cleaned up version of it.
-    Will be ran by itself in the df_clean function.
+    Description
+    - A method we use to clean every inputed string and prepare it for model processing
+    
+    Inputs:
+    - Takes in a string and returns a cleaned up version of it.
+    - Takes in a  boolean variable to determine whether or not the lemmatizing function will be used.
+    
+    Steps:
+    1. Split the tweet into tokens
+    2. Convert all capitalized letters into lower-case
+    3. Remove punctuation
+    4. Remove twitter jargon such as @ mentions
+    5. Remove leftover numbers
+    6. Remove words with accents
+    7. Remove stop words
+    8. Replace instances of the target in the text with 'product_target'
+    9. Remove empty strings
+    10. Lemmatize the words
+    11. Rejoin all the tokens into one string
+    
+    Outputs:
+    - A cleaned up string of words ready for model processing.
     '''
     sw = stopwords.words('english')
     sw.extend(['link', 'rt', 'get'])
@@ -119,7 +149,17 @@ def get_wordnet_pos(treebank_tag):
 
 def emotion_label(string):
     '''
-    Turns the emotion values into numerical labels.
+    Description:
+    - Simple mapping function used to turn our targets from words into a numerical value
+    
+    Inputs:
+    - A string
+    
+    Steps:
+    1. Matches the input string with a preset value, positive is a 2, negative is a 0, and neutral is a 1
+    
+    Output:
+    - The corresponding integer value
     '''
     s = string
     if s == 'Positive emotion':
@@ -133,10 +173,23 @@ def emotion_label(string):
 
 def df_clean(df = None, lem = True):
     '''
-    A function that returns a cleaned up dataframe.
-    It also drops all the no-product rows.
-    Will take a dataframe as an argument, and can also pass the argument 'False' to turn off lemmatizer if needed.
+    Description:
+    - A function that returns a cleaned up dataframe.
     
+    Inputs:
+    - It can take a dataframe, if no dataframe is passed through it will use our default one.
+    - It can also set a boolean value, it is used as a flag to determine if lemmatizing will be used.
+    
+    Steps:
+    1. A dataframe will be either created or brought in from an external source determined by the parameter
+    2. The dataframe will then be adjusted to make reading easier
+    3. NaN values and values we don't want will be removed
+    4. We will use the emotion_label to change our emotion values into numerical
+    5. We will use the txt_clean function on the tweet text for every row 
+    6. Lastly we will drop unused columns
+    
+    Outputs:
+    - A cleaned dataframe that we will use for our models
     '''
     if df is None:
         this_path = pathlib.Path().absolute()
@@ -154,8 +207,24 @@ def df_clean(df = None, lem = True):
 
 def external_data(lem = True):
     '''
-    A function that returns a big array with all three external datasets cleaned up so that it is similar to our base data.
-    Has an optional parameter of lem, by default it is true but setting it to false will leave out the lemmatizing.
+    Description:
+    - A function that gives us the cleaned up dataframes of our three external datasets
+    - It will be cleaned in a way similar to our base dataset
+    
+    Inputs:
+    - A boolean variable that will determine whether or not a lemmatizer is used or not
+    
+    Steps:
+    1. Reads in the data from our datasets to create three dfs
+    2. For each df, grab the columns that we care about and rename them to match our base data
+    3. We then map our emotions column in a way that matches our base data (0, 1, and 2 variables)
+    4. Use our txt_clean function to clean up the texts in the dataset
+    5. Drop all unused columns
+    6. Concat all three together
+    
+    Outputs:
+    - A big dataframe containing cleaned up version of all the tweets from external sources
+    - Ready to be added directly to the end of our base data
     '''
     this_path = pathlib.Path().absolute()
     d_path = this_path.parent / "data" 
